@@ -779,6 +779,12 @@ impl PgDataClient for DocumentDBDataClient {
         connection_context: &ConnectionContext,
     ) -> Result<Response> {
         let (_, request_info, request_tracker) = request_context.get_components();
+        
+        // Construct combined BSON document with filter, all, and ownOps fields
+        let mut combined_doc = filter.clone();
+        combined_doc.append("$all", all);
+        combined_doc.append("$ownOps", own_ops);
+        
         let current_op_rows = self
             .pull_connection(connection_context)
             .await?
@@ -787,8 +793,8 @@ impl PgDataClient for DocumentDBDataClient {
                     .service_context
                     .query_catalog()
                     .current_op(),
-                &[Type::BYTEA, Type::BOOL, Type::BOOL],
-                &[&PgDocument(filter), &all, &own_ops],
+                &[Type::BYTEA],
+                &[&PgDocument(&combined_doc)],
                 Timeout::transaction(request_info.max_time_ms),
                 request_tracker,
             )
