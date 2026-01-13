@@ -218,9 +218,6 @@ pub trait PgDataClient: Send + Sync {
     async fn execute_current_op(
         &self,
         request_context: &mut RequestContext<'_>,
-        filter: &RawDocumentBuf,
-        all: bool,
-        own_ops: bool,
         connection_context: &ConnectionContext,
     ) -> Result<Response>;
 
