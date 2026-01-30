@@ -9,7 +9,7 @@
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use bson::{RawDocument, RawDocumentBuf};
+use bson::RawDocument;
 use tokio_postgres::{error::SqlState, types::Type, Row};
 
 use crate::{
@@ -776,7 +776,7 @@ impl PgDataClient for DocumentDBDataClient {
         connection_context: &ConnectionContext,
     ) -> Result<Response> {
         let (request, request_info, request_tracker) = request_context.get_components();
-        
+
         let current_op_rows = self
             .pull_connection(connection_context)
             .await?
