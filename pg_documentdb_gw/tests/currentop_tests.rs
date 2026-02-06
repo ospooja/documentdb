@@ -93,12 +93,6 @@ async fn test_currentop_captures_mongodb_operations() {
         .await
         .unwrap();
 
-    println!("\n=== currentOp result ===");
-    println!(
-        "{}",
-        serde_json::to_string_pretty(&result).unwrap_or_else(|_| format!("{:?}", result))
-    );
-
     let inprog = result.get_array("inprog").unwrap();
     for op in inprog.iter() {
         if let Some(doc) = op.as_document() {
@@ -106,7 +100,6 @@ async fn test_currentop_captures_mongodb_operations() {
                 if active {
                     if let Ok(ns) = doc.get_str("ns") {
                         if ns.contains("large_test_collection") {
-                            
                             // Verify operation has expected fields
                             assert!(doc.contains_key("opid"));
                             assert!(doc.contains_key("type"));
@@ -128,5 +121,4 @@ async fn test_currentop_captures_mongodb_operations() {
     // Verify we can still get currentOp output after operations complete
     let final_result = db.run_command(doc! {"currentOp": 1}).await.unwrap();
     assert_eq!(final_result.get_f64("ok").unwrap(), 1.0);
-
 }
