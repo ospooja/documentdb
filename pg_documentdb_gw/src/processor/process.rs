@@ -33,7 +33,7 @@ enum Retry {
 }
 
 pub async fn process_request(
-    request_context: &RequestContext<'_>,
+    request_context: &mut RequestContext<'_>,
     connection_context: &mut ConnectionContext,
     pg_data_client: impl PgDataClient,
 ) -> Result<Response> {

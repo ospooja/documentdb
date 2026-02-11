@@ -5,7 +5,7 @@
  *
  *-------------------------------------------------------------------------
  */
-use bson::{spec::ElementType, RawBsonRef, RawDocumentBuf};
+use bson::{spec::ElementType, RawBsonRef};
 use std::sync::Arc;
 
 use crate::{
