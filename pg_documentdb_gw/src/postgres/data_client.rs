@@ -9,7 +9,7 @@
 use std::{future::Future, sync::Arc};
 
 use async_trait::async_trait;
-use bson::{RawDocument, RawDocumentBuf};
+use bson::RawDocument;
 use tokio_postgres::Row;
 
 use crate::{

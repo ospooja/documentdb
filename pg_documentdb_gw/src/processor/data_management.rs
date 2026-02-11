@@ -5,10 +5,8 @@
  *
  *-------------------------------------------------------------------------
  */
-
-use std::sync::Arc;
-
 use bson::{spec::ElementType, RawBsonRef, RawDocumentBuf};
+use std::sync::Arc;
 
 use crate::{
     bson::convert_to_bool,
@@ -231,7 +229,7 @@ pub async fn process_db_stats(
 }
 
 pub async fn process_current_op(
-    request_context: &RequestContext<'_>,
+    request_context: &mut RequestContext<'_>,
     connection_context: &ConnectionContext,
     pg_data_client: &impl PgDataClient,
 ) -> Result<Response> {
