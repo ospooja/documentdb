@@ -222,7 +222,7 @@ pub trait PgDataClient: Send + Sync {
 
     async fn execute_current_op(
         &self,
-        request_context: &mut RequestContext<'_>,
+        request_context: &RequestContext<'_>,
         connection_context: &ConnectionContext,
     ) -> Result<Response>;
 

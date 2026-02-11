@@ -229,7 +229,7 @@ pub async fn process_db_stats(
 }
 
 pub async fn process_current_op(
-    request_context: &mut RequestContext<'_>,
+    request_context: &RequestContext<'_>,
     connection_context: &ConnectionContext,
     pg_data_client: &impl PgDataClient,
 ) -> Result<Response> {

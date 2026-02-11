@@ -805,7 +805,7 @@ impl PgDataClient for DocumentDBDataClient {
 
     async fn execute_current_op(
         &self,
-        request_context: &mut RequestContext<'_>,
+        request_context: &RequestContext<'_>,
         connection_context: &ConnectionContext,
     ) -> Result<Response> {
         let (request, request_info, request_tracker) = request_context.get_components();
