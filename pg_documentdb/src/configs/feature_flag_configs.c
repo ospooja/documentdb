@@ -212,6 +212,10 @@ bool ForceCollStatsDataCollection = DEFAULT_FORCE_COLL_STATS_DATA_COLLECTION;
 #define DEFAULT_ENABLE_ID_INDEX_PUSHDOWN true
 bool EnableIdIndexPushdown = DEFAULT_ENABLE_ID_INDEX_PUSHDOWN;
 
+#define DEFAULT_ENABLE_DOLLAR_IN_TO_SCALAR_ARRAY_OP_EXPR_CONVERSION true
+bool EnableDollarInToScalarArrayOpExprConversion =
+	DEFAULT_ENABLE_DOLLAR_IN_TO_SCALAR_ARRAY_OP_EXPR_CONVERSION;
+
 /* Remove after 111*/
 #define DEFAULT_USE_LOOKUP_NEW_PROJECT_INLINE_METHOD true
 bool EnableUseLookupNewProjectInlineMethod = DEFAULT_USE_LOOKUP_NEW_PROJECT_INLINE_METHOD;
@@ -291,6 +295,13 @@ bool EnableDropInvalidIndexesOnReadOnly = DEFAULT_ENABLE_DROP_INDEXES_ON_READ_ON
 /* Remove after v111*/
 #define DEFAULT_INDEX_BUILDS_SCHEDULED_ON_BGWORKER false
 bool IndexBuildsScheduledOnBgWorker = DEFAULT_INDEX_BUILDS_SCHEDULED_ON_BGWORKER;
+
+/* Remove it after 112 */
+#define DEFAULT_INLINE_CHANGESTREAM_MATCH_STAGES true
+bool InlineChangeStreamMatchStage = DEFAULT_INLINE_CHANGESTREAM_MATCH_STAGES;
+
+#define DEFAULT_REMOVE_MATCH_NAMESPACE_FILTERS true
+bool RemoveMatchNamespaceFilters = DEFAULT_REMOVE_MATCH_NAMESPACE_FILTERS;
 
 /* FEATURE FLAGS END */
 
@@ -607,6 +618,14 @@ InitializeFeatureFlagConfigurations(const char *prefix, const char *newGucPrefix
 			"Whether to enable extended id index pushdown optimizations."),
 		NULL, &EnableIdIndexPushdown, DEFAULT_ENABLE_ID_INDEX_PUSHDOWN,
 		PGC_USERSET, 0, NULL, NULL, NULL);
+
+	DefineCustomBoolVariable(
+		psprintf("%s.enableDollarInToScalarArrayOpExprConversion", newGucPrefix),
+		gettext_noop(
+			"Whether to enable conversion of $in with scalar array to OpExpr."),
+		NULL, &EnableDollarInToScalarArrayOpExprConversion,
+		DEFAULT_ENABLE_DOLLAR_IN_TO_SCALAR_ARRAY_OP_EXPR_CONVERSION,
+		PGC_USERSET, 0, NULL, NULL, NULL);
 	DefineCustomBoolVariable(
 		psprintf("%s.enableExprLookupIndexPushdown", newGucPrefix),
 		gettext_noop(
@@ -795,6 +814,22 @@ InitializeFeatureFlagConfigurations(const char *prefix, const char *newGucPrefix
 			"Whether to enable the new addToSet aggregation implementation that prevents crashes with the new delayed portal feature."),
 		NULL, &EnableAddToSetAggregationRewrite,
 		DEFAULT_ENABLE_ADD_TO_SET_AGGREGATION_REWRITE,
+		PGC_USERSET, 0, NULL, NULL, NULL);
+
+	DefineCustomBoolVariable(
+		psprintf("%s.inlineChangeStreamMatchStage", newGucPrefix),
+		gettext_noop(
+			"Determines whether to inline $match aggregation stage with  $changestreams"),
+		NULL, &InlineChangeStreamMatchStage,
+		DEFAULT_INLINE_CHANGESTREAM_MATCH_STAGES,
+		PGC_USERSET, 0, NULL, NULL, NULL);
+
+	DefineCustomBoolVariable(
+		psprintf("%s.removeMatchNamespaceFilters", newGucPrefix),
+		gettext_noop(
+			"Determines whether to remove $match aggregation stage filters on namespace when inlined with $changestreams"),
+		NULL, &RemoveMatchNamespaceFilters,
+		DEFAULT_REMOVE_MATCH_NAMESPACE_FILTERS,
 		PGC_USERSET, 0, NULL, NULL, NULL);
 
 	DefineCustomBoolVariable(
